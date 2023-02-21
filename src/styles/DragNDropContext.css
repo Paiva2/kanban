@@ -126,7 +126,7 @@
   color: rgb(255, 0, 0);
 }
 
-@media(max-width: 440px) {
+@media (max-width: 440px) {
   .containers {
     height: 550px;
     width: 305px;

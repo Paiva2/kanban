@@ -1,60 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=NTR&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=NTR&display=swap");
 
-.header{
-    color: rgb(173, 160, 160);
-    font-size: 30px;
-    letter-spacing: +1.3px;
-    font-family: 'NTR';
-    height: 40px;
+.header {
+  color: rgb(173, 160, 160);
+  font-size: 30px;
+  letter-spacing: +1.3px;
+  font-family: "NTR";
+  height: 40px;
 }
-.add-task{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-bottom: 2px solid #1f6adac5;
-    width: 450px;
-    height: 70px;
-    padding-left: 50px;
+.add-task {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-bottom: 2px solid #1f6adac5;
+  width: 450px;
+  height: 70px;
+  padding-left: 50px;
 }
 
 .add-task button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-    font-size: 20px;
-    border-radius: 100px;
-    width: 40px;
-    height: 40px;
-    padding-left: 2px;
-    cursor: pointer;
-    border: none;
-    background-color: #1f6adac5;
-    color: white;
-  }
-  
-  .add-task button:hover {
-    background-color: #0066ffc5;
-    transition: 0.3s all;
-  }
-  
-  .add-task input {
-    padding-left: 10px;
-    font-size: 16px;
-    width: 190px;
-    height: 38px;
-    border: none;
-    margin: 5px;
-    border-bottom: 2px solid rgb(113, 162, 235);
-  }
-  
-.input-field:focus {
-    outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  font-size: 20px;
+  border-radius: 100px;
+  width: 40px;
+  height: 40px;
+  padding-left: 2px;
+  cursor: pointer;
+  border: none;
+  background-color: #1f6adac5;
+  color: white;
 }
 
-@media(max-width: 440px) {
-  .add-task{
+.add-task button:hover {
+  background-color: #0066ffc5;
+  transition: 0.3s all;
+}
+
+.add-task input {
+  padding-left: 10px;
+  font-size: 16px;
+  width: 190px;
+  height: 38px;
+  border: none;
+  margin: 5px;
+  border-bottom: 2px solid rgb(113, 162, 235);
+}
+
+.input-field:focus {
+  outline: none;
+}
+
+@media (max-width: 440px) {
+  .add-task {
     width: 270px;
   }
 }
