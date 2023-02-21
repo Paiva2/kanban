@@ -68,3 +68,15 @@
     background-color: rgb(218, 11, 11);
     transition: 0.6s all;
   }
+
+  @media(max-width: 440px){
+    .modal-content{
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-content input{
+      margin: 10px;
+      width: 280px;
+    }
+  }

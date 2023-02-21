@@ -125,3 +125,11 @@
 .del-btn:hover {
   color: rgb(255, 0, 0);
 }
+
+@media(max-width: 440px) {
+  .containers {
+    height: 550px;
+    width: 305px;
+    margin: 10px;
+  }
+}

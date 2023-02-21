@@ -22,3 +22,23 @@
     margin-bottom: 10px;
     width: 500px;
 }
+
+@media(max-width: 440px){
+    .main-container{
+        margin-top: 5%;
+        width: 355px;
+        height: auto;
+    }
+
+    .container-wrapper{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        height: auto;
+    }
+
+    .footer-line{
+        width: 270px;
+    }
+}

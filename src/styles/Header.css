@@ -52,3 +52,9 @@
 .input-field:focus {
     outline: none;
 }
+
+@media(max-width: 440px) {
+  .add-task{
+    width: 270px;
+  }
+}
