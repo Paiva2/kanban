@@ -1,4 +1,4 @@
-import { React, useState, useRef } from "react";
+import { React, useState, useRef, useEffect } from "react";
 import Modal from 'react-modal';
 import "../styles/App.css";
 import board from './Board'
@@ -8,28 +8,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faCalendarDays, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 import DateInfo from "./DateInfo";
 import Header from "./Header";
-Modal.setAppElement("#root");
 
 function Kanban() {
+  const boardModel = board;
+  const [columns, setColumns] = useState(boardModel);
   const [newTaskValue, newValue] = useState(""); // New task value on input field
   const [modalIsOpen, setIsOpen] = useState(false);
   const inputField = useRef();
-  const boardModel = board;
-  const [columns, setColumns] = useState(boardModel);
+  const date = DateInfo()
+
+  const saveData = (data) => {
+    const tasksJSON = JSON.stringify(data);
+    localStorage.setItem("tasks", tasksJSON);
+  }
+  
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      const convertedSavedTasks = JSON.parse(savedTasks);
+      setColumns(convertedSavedTasks)
+    }
+  }, []);
   
   const addNewTask = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     if(!newTaskValue) return
 
     const newColumn = columns.map(column => {
       if(column.id === '1'){
-      const newCards = [...column.cards, { id: nanoid(8), task: newTaskValue, date: DateInfo()}]
+      const newCards = [...column.cards, { id: nanoid(8), task: newTaskValue, date: date}]
       return  { ...column, cards: newCards }
     }
     return column
   }) 
-    
     setColumns(newColumn)
+    saveData(newColumn);
     newValue("")
     inputField.current.value = "";
     inputField.current.focus();
@@ -38,6 +51,7 @@ function Kanban() {
   const setNewTaskValue = ({ target }) => {
     newValue(target.value);
   };
+
 
   const onDragEnd = (card) => {
     const { source, destination, draggableId } = card;
@@ -64,7 +78,8 @@ function Kanban() {
         }
         return column
       })
-      setColumns(newColumn);
+      setColumns(newColumn)
+      saveData(newColumn);
     }else{
       sourceColumn = sourceColumn.reduce((a, targetObj) => targetObj, {})
       destinationColumn = destinationColumn.reduce((a, targetObj) => targetObj, {})
@@ -84,38 +99,39 @@ function Kanban() {
       })
       
       setColumns(newColumn)
+      saveData(newColumn)
     }
     newValue("")
 }
 
-const openModal = () => {
-  setIsOpen(true);
-};
+  const delTask = ({target}) =>{
+    const targetDiv = target.closest(".card-task");
+    const containerTargetDiv = targetDiv.closest(".containers");
+    const containerID = containerTargetDiv.getAttribute("data-rbd-droppable-id");
+    const targetID = targetDiv.getAttribute("data-rbd-draggable-id");
 
-const closeModal = () => {
-  setIsOpen(false);
-};
+    const columnAfterDelete = columns.map((column) => {
+      if (column.id === containerID) {
+        column.cards.map((task, index) => {
+          const containerCards = column.cards;
+          if (task.id === targetID) {
+            containerCards.splice(index, 1);
+          }
+        });
+      }
+      return column;
+    });
+    setColumns(columnAfterDelete)
+    saveData(columnAfterDelete);
+  } 
 
+  const openModal = () => {
+    setIsOpen(true);
+  };
 
-const delTask = ({target}) =>{
-  const targetDiv = target.closest(".card-task");
-  const containerTargetDiv = targetDiv.closest(".containers");
-  const containerID = containerTargetDiv.getAttribute("data-rbd-droppable-id");
-  const targetID = targetDiv.getAttribute("data-rbd-draggable-id");
-
-  const columnAfterDelete = columns.map((column) => {
-    if (column.id === containerID) {
-      column.cards.map((task, index) => {
-        const containerCards = column.cards;
-        if (task.id === targetID) {
-          containerCards.splice(index, 1);
-        }
-      });
-    }
-    return column;
-  });
-  setColumns(columnAfterDelete);
-}
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <div className="main-container">
@@ -138,11 +154,7 @@ const delTask = ({target}) =>{
             <Droppable droppableId={item.id} key={index}>
               {(provider, snapshot) => (
                 <div
-                  className={
-                    snapshot.isDraggingOver
-                      ? "dragging-over-column"
-                      : "containers"
-                  }
+                  className={snapshot.isDraggingOver ? "dragging-over-column": "containers"}
                   ref={provider.innerRef}
                   {...provider.droppableProps}
                 >
@@ -159,38 +171,24 @@ const delTask = ({target}) =>{
                       {(provider, snapshot) => (
                         <div
                           isDragging={snapshot.isDragging}
-                          className={
-                            snapshot.isDragging
-                              ? "card-task-dragging"
-                              : "card-task"
-                          }
+                          className={snapshot.isDragging ? "card-task-dragging": "card-task"}
                           ref={provider.innerRef}
                           {...provider.draggableProps}
                           {...provider.dragHandleProps}
                         >
                           <div
-                            className={
-                              snapshot.isDragging
-                                ? "text-task-dragging"
-                                : "task-text"
-                            }
+                            className={snapshot.isDragging ? "text-task-dragging": "task-text"}
                           >
                             <p>{card.task}</p>
                           </div>
                           <div
-                            className={
-                              snapshot.isDragging
-                                ? "actions-dragging"
-                                : "actions"
-                            }
+                            className={snapshot.isDragging ? "actions-dragging": "actions"}
                           >
                             <div className="date-container">
                               <p>
                                 <FontAwesomeIcon
                                   className={
-                                    snapshot.isDragging
-                                      ? "calendar-drag"
-                                      : "calendar-icon"
+                                    snapshot.isDragging ? "calendar-drag" : "calendar-icon"
                                   }
                                   icon={faCalendarDays}
                                 />
@@ -201,7 +199,6 @@ const delTask = ({target}) =>{
                               <button onClick={openModal} className="edit-btn">
                                 <FontAwesomeIcon icon={faEdit} />
                               </button>
-
                               <button onClick={delTask} className="del-btn">
                                 <FontAwesomeIcon icon={faTrash} />
                               </button>
@@ -222,17 +219,17 @@ const delTask = ({target}) =>{
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         overlayClassName="modal-overlay"
-        className="modal-content"
-      >
+        className="modal-content">
         <h2>Edit your task!</h2>
         <hr />
-        <input placeholder="Edit your task"></input>
+        <input placeholder="Edit your task" />
         <button onClick={closeModal}>Close</button>
         <button>Ok</button>
       </Modal>
       <div className="footer-line"></div>
     </div>
-  );
+  );  
 }
 
 export default Kanban;
+Modal.setAppElement("#root");
