@@ -11,17 +11,15 @@ import Header from "./Header";
 
 function Kanban() {
   const boardModel = board;
+  const inputField = useRef();
+  const date = DateInfo()
   const [columns, setColumns] = useState(boardModel);
   const [newTaskValue, newValue] = useState(""); // New task value on input field
   const [modalIsOpen, setIsOpen] = useState(false);
-  const inputField = useRef();
-  const date = DateInfo()
+  const [editValue, setEdit] = useState("")
+  const [cardToEdit, setCardToEdit] = useState([])
 
-  const saveData = (data) => {
-    const tasksJSON = JSON.stringify(data);
-    localStorage.setItem("tasks", tasksJSON);
-  }
-  
+
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
@@ -29,7 +27,12 @@ function Kanban() {
       setColumns(convertedSavedTasks)
     }
   }, []);
-  
+
+  const saveData = (data) => {
+    const tasksJSON = JSON.stringify(data);
+    localStorage.setItem("tasks", tasksJSON);
+  }
+
   const addNewTask = (e) => {
     e.preventDefault(); 
     if(!newTaskValue) return
@@ -51,6 +54,10 @@ function Kanban() {
   const setNewTaskValue = ({ target }) => {
     newValue(target.value);
   };
+
+  const setEditValue = ({target}) => {
+    setEdit(target.value)
+  }
 
 
   const onDragEnd = (card) => {
@@ -104,6 +111,26 @@ function Kanban() {
     newValue("")
 }
 
+  const doneEdit = () =>{
+    let [cardTask, containers] = cardToEdit
+    const containerID = containers.getAttribute("data-rbd-droppable-id");
+    const targetID = cardTask.getAttribute("data-rbd-draggable-id");
+
+    const columnAfterEdit = columns.map((column) => {
+      if (column.id === containerID) {
+        column.cards.map((task) => {
+          if (task.id === targetID) {
+            task.task = editValue
+          }
+        });
+      }
+      return column;
+    }); 
+    setColumns(columnAfterEdit);
+    saveData(columnAfterEdit);
+    setIsOpen(false);
+  }
+
   const delTask = ({target}) =>{
     const targetDiv = target.closest(".card-task");
     const containerTargetDiv = targetDiv.closest(".containers");
@@ -125,8 +152,11 @@ function Kanban() {
     saveData(columnAfterDelete);
   } 
 
-  const openModal = () => {
+  const openModal = ({target}) => {
+    const targetDiv = target.closest(".card-task");
+    const containerTargetDiv = targetDiv.closest(".containers");
     setIsOpen(true);
+    setCardToEdit([targetDiv, containerTargetDiv])
   };
 
   const closeModal = () => {
@@ -170,7 +200,7 @@ function Kanban() {
                     >
                       {(provider, snapshot) => (
                         <div
-                          isDragging={snapshot.isDragging}
+                          isdragging={snapshot.isDragging ? snapshot.isDragging.toString() : undefined}
                           className={snapshot.isDragging ? "card-task-dragging": "card-task"}
                           ref={provider.innerRef}
                           {...provider.draggableProps}
@@ -196,7 +226,7 @@ function Kanban() {
                               </p>
                             </div>
                             <div className="del-edit">
-                              <button onClick={openModal} className="edit-btn">
+                              <button onClick={openModal}className="edit-btn">
                                 <FontAwesomeIcon icon={faEdit} />
                               </button>
                               <button onClick={delTask} className="del-btn">
@@ -222,9 +252,9 @@ function Kanban() {
         className="modal-content">
         <h2>Edit your task!</h2>
         <hr />
-        <input placeholder="Edit your task" />
-        <button onClick={closeModal}>Close</button>
-        <button>Ok</button>
+        <input onChange={setEditValue} placeholder="Edit your task" />
+        <button className="cancel-edit" onClick={closeModal}>Cancel</button>
+        <button onClick={doneEdit} className="done-edit">Done</button>
       </Modal>
       <div className="footer-line"></div>
     </div>
