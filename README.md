@@ -12,7 +12,7 @@
 # Clone this project
 bash
 
-$ git clone https://github.com/Paiva2/Kanban-concept
+`$ git clone https://github.com/Paiva2/Kanban-concept`
 
 # Used Technologies
 
