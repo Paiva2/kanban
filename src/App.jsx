@@ -1,10 +1,10 @@
 import { React } from "react";
-import Kanban from './components/Kanban'
+import KanbanContext from './components/KanbanContext'
 
 function App() {
   return (
     <>
-    <Kanban />
+    <KanbanContext />
     </>
   );
 }

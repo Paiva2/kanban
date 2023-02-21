@@ -1,12 +1,12 @@
 import { React, useState, useRef, useEffect } from "react";
-import Modal from 'react-modal';
-import "../styles/App.css";
-import board from './Board'
+import Modal from "react-modal";
+import "../styles/KanbanContext.css";
+import board from "./board";
 import { nanoid } from "nanoid";
 import DateInfo from "./DateInfo";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import Header from "./Header";
-import DroppableContainer from "./DroppableContainer";
+import DragNDropContext from "./DragNDropContext";
 
 function Kanban() {
   const boardModel = board;
@@ -65,26 +65,14 @@ function Kanban() {
     const { source, destination, draggableId } = card;
     if (!destination) return;
 
-    let sourceColumn = columns.filter(
-      (column) => column.id === source.droppableId
-    );
-    let destinationColumn = columns.filter(
-      (column) => column.id === destination.droppableId
-    );
+    let sourceColumn = columns.filter((column) => column.id === source.droppableId);
+    let destinationColumn = columns.filter((column) => column.id === destination.droppableId);
 
-    const sourceListCopy = sourceColumn
-      .map((item) => item)
-      .reduce((a, card) => card.cards, {});
-    const destinationListCopy = destinationColumn
-      .map((item) => item)
-      .reduce((a, card) => card.cards, {});
+    const sourceListCopy = sourceColumn.map((item) => item).reduce((a, card) => card.cards, {});
+    const destinationListCopy = destinationColumn.map((item) => item).reduce((a, card) => card.cards, {});
 
-    const filteredList = sourceListCopy.filter(
-      (task) => task.id !== draggableId
-    );
-    const draggedItem = sourceListCopy
-      .filter((task) => task.id === draggableId)
-      .reduce((a, item) => item, {});
+    const filteredList = sourceListCopy.filter((task) => task.id !== draggableId);
+    const draggedItem = sourceListCopy.filter((task) => task.id === draggableId).reduce((a, item) => item, {});
 
     if (destination.droppableId === source.droppableId) {
       sourceColumn = sourceColumn.reduce((a, targetObj) => targetObj, {});
@@ -101,18 +89,12 @@ function Kanban() {
       saveData(newColumn);
     } else {
       sourceColumn = sourceColumn.reduce((a, targetObj) => targetObj, {});
-      destinationColumn = destinationColumn.reduce(
-        (a, targetObj) => targetObj,
-        {}
-      );
+      destinationColumn = destinationColumn.reduce((a, targetObj) => targetObj,{});
 
       filteredList.splice(source.index, -1);
       destinationListCopy.splice(destination.index, 0, draggedItem);
       const sourceColumnCopy = { ...sourceColumn, cards: filteredList };
-      const destinationColumnCopy = {
-        ...destinationColumn,
-        cards: destinationListCopy,
-      };
+      const destinationColumnCopy = {...destinationColumn,cards: destinationListCopy};
 
       const newColumn = columns.map((column) => {
         if (column.id === source.droppableId) {
@@ -165,9 +147,7 @@ function Kanban() {
   const deleteTask = ({ target }) => {
     const targetDiv = target.closest(".card-task");
     const containerTargetDiv = targetDiv.closest(".containers");
-    const containerID = containerTargetDiv.getAttribute(
-      "data-rbd-droppable-id"
-    );
+    const containerID = containerTargetDiv.getAttribute("data-rbd-droppable-id");
     const targetID = targetDiv.getAttribute("data-rbd-draggable-id");
 
     const columnAfterDelete = columns.map((column) => {
@@ -204,7 +184,7 @@ function Kanban() {
         inputField={addTaskInput}
       />
       <div className="container-wrapper">
-        <DroppableContainer
+        <DragNDropContext
           onDragEnd={onDragEnd}
           columns={columns}
           modalIsOpen={modalIsOpen}
@@ -216,7 +196,7 @@ function Kanban() {
           openModal={openModal}
         />
       </div>
-      <div className="footer-line"></div>
+      <div className="footer-line" />
     </div>
   );
 }

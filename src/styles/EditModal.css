@@ -1,0 +1,70 @@
+.modal-overlay{
+    background: rgba(2, 2, 2, 0.7);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content{
+    width: 90%;
+    max-width: 390px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.modal-content input:focus {
+    outline: none;
+}
+
+.modal-content input{
+    height: 30px;
+    width: 200px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid rgb(113, 162, 235);
+    padding-left: 10px;
+  }
+  
+  .modal-content h2{
+    margin: 5px;
+    text-align: center;
+  }
+  
+  .modal-content button {
+    padding: 5px;
+    font-size: large;
+    float: right;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .cancel-edit {
+    border: none;
+    background-color: rgb(221, 63, 63);
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .done-edit {
+    border: none;
+    background-color: #0768fac5;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .done-edit:hover {
+    background-color: #0267fffd;
+    transition: 0.6s all;
+  }
+  
+  .cancel-edit:hover {
+    background-color: rgb(218, 11, 11);
+    transition: 0.6s all;
+  }

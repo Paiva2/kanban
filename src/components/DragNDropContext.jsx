@@ -3,8 +3,9 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 import EditModal from "./EditModal";
+import '../styles/DragNDropContext.css'
 
-const DroppableContainer = ({
+const DragNDropContext = ({
   onDragEnd,
   columns,
   modalIsOpen,
@@ -107,4 +108,4 @@ const DroppableContainer = ({
   );
 };
 
-export default DroppableContainer;
+export default DragNDropContext;
