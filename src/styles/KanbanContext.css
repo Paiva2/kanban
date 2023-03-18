@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   background-color: rgb(255, 255, 255);
-  height: 780px;
+  height: 650px;
   width: 1000px;
   border-radius: 50px;
   box-shadow: 0px 11px 14px -4px rgba(0, 0, 0, 0.5);
@@ -14,7 +14,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 750px;
 }
 .footer-line {
   border-top: 2px solid #1f6adac5;
