@@ -1,9 +1,14 @@
 import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendarDays,
+  faTrash,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import EditModal from "./EditModal";
-import '../styles/DragNDropContext.css'
+import "../styles/DragNDropContext.css";
+import DeleteModal from "./DeleteModal";
 
 const DragNDropContext = ({
   onDragEnd,
@@ -14,7 +19,10 @@ const DragNDropContext = ({
   setEditValue,
   doneEdit,
   deleteTask,
-  openModal
+  openModal,
+  openDelModal,
+  delModalIsOpen,
+  closeDelModal,
 }) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -52,6 +60,11 @@ const DragNDropContext = ({
                       {...provider.draggableProps}
                       {...provider.dragHandleProps}
                     >
+                      <DeleteModal
+                        delModalIsOpen={delModalIsOpen}
+                        closeDelModal={closeDelModal}
+                        deleteTask={deleteTask}
+                      />
                       <div
                         className={
                           snapshot.isDragging
@@ -90,7 +103,7 @@ const DragNDropContext = ({
                             setEditValue={setEditValue}
                             doneEdit={doneEdit}
                           />
-                          <button onClick={deleteTask} className="del-btn">
+                          <button onClick={openDelModal} className="del-btn">
                             <FontAwesomeIcon icon={faTrash} />
                           </button>
                         </div>
